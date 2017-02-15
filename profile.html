@@ -1,0 +1,44 @@
+<!--http://13.112.122.174/index_prac.html -->
+<?php
+
+include 'header.php';
+
+?>
+
+  <body>
+    <div class="container">
+    <div id="main">
+  		<?php
+        include 'profile.php';
+  		?>
+    </div>
+    	
+      <script type="text/javascript">
+       
+      function like_btn(id){
+        $.ajax({
+          type:"POST",
+          url:"like_profile.php",
+          data:{t_id:id},
+          success:function(response){
+            var json = jQuery.parseJSON(response);
+           if(json.suc){
+            $('#likes'+id).text(json.like);
+            if(json.cancel){
+              $('#like_btn_id'+id).val("좋아요").css('background','gray');
+            }else{
+              $('#like_btn_id'+id).val("좋아요 취소").css('background','red');          
+            }
+          }else{
+            alert("like fail");
+          }
+        }});
+       };
+      </script>
+
+    </div>
+<?php
+include 'footer.php';
+?>
+  </body>
+</html>

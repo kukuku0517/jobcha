@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+
+
+<html>
+	<head></head>
+	<body>
+		
+
+<div>	
+<div id="no">aaa</div>
+<div id="hash">aa</div>
+<input id="ttt" type="text" value="d">
+</div>
+<script>
+
+$("#ttt").keyup(function(){
+	
+	var t = $(this).val();
+	$('#no').text(t);
+	
+
+	$.ajax({
+		type:"POST",
+		url:"hash.php",
+		data:{'text':t},
+		success:function(res){
+			$('#hash').html(res);
+		}
+	});
+});
+
+
+
+</script>
+
+	</body>
+</html>

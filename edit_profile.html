@@ -1,0 +1,124 @@
+<?php
+
+include 'header.php';
+
+?>
+<script>
+  $(document).ready(function(){
+
+    //function called whenever hash tags are loaded(appear, add)
+    var hash_load=function(hash){
+       
+       var hash_span= hash.children().last();
+
+       //color of hash tag
+       var set_main=function(main){
+           if(main==0){
+              hash_span.children('#hash_span').css('background','#3368FF');
+
+            }else{
+              hash_span.children('#hash_span').css('background','#E67418');
+            }
+       }     
+
+      //present value of hash tag,change color
+       var main = hash_span.children('#hash_id').val();
+       set_main(main);
+
+      //whenever clicked, main<->sub
+       hash_span.children('#hash_span').on('click',function(){
+         main=1-main;
+         hash_span.children('#hash_id').val(main);
+         set_main(main);
+       }); 
+
+      //if clicked, hash tag disappear
+       var hash_remove = hash_span.children('#hash_remove');    
+       hash_remove.on('click',function(){          
+          hash_remove.parent().remove();
+       });
+    };
+
+  $.ajax({
+    //gets profile datas as JSON
+    url:"edit_profile.php",
+    success:function(res){
+    var data= $.parseJSON(res);
+     //when edit, previous data are inserted
+     $("input[name=name]").val(data.name);
+     $("input[name=age]").val(data.age);
+     $("input[name=sex]").val(data.sex);
+     $("input[name=introduce]").val(data.intro);
+
+     //loading previous hashtags
+     var m=data.hash_main;
+     for(var hash in m){
+     $("#hash").append("<div id =\'hash_div\'><input type=\"hidden\" name=\'hash[]\' value=\'"+m[hash]+"\'><input id=\'hash_id\'type=\"hidden\" name=\'hash_id[]\' value=\'1\'><span id= \'hash_span\' >#"+m[hash]+"</span><span id= \'hash_remove\' >x</span></div>");
+     hash_load($("#hash"));
+     }
+
+     var s=data.hash_sub;
+     for(var hash in s){
+     $("#hash").append("<div id =\'hash_div\'><input type=\"hidden\" name=\'hash[]\' value=\'"+s[hash]+"\'><input id=\'hash_id\'type=\"hidden\" name=\'hash_id[]\' value=\'0\'><span id= \'hash_span\' >#"+s[hash]+"</span><span id= \'hash_remove\' >x</span></div>");
+      hash_load($("#hash"));
+     }
+    }
+  });  
+
+  $("#hash_text").keyup(function(){
+
+    var t = $(this).val();
+    $.ajax({
+      type:"POST",
+      url:"hash.php",
+      data:{'text':t},
+      success:function(res){
+      
+      if(res!=""){
+          $('#hash').append(res);
+          $('#hash_text').val("");
+        
+          hash_load($("#hash"));
+        }
+      }
+    });
+  });
+
+$('#pf_add').on('click',function(){
+$(this).parent().append('<input name="pf[]" type="text">');
+});
+$('#comp_add').on('click',function(){
+$(this).parent().append('<input name="comp[]" type="text">');
+});
+
+  });
+</script>
+
+<div class="box">
+	<div class="profile">
+		<form action="submit_profile.php" method="GET">
+		<div>이름 <input name="name" type="text" ></div>
+		<div>나이 <input name="age" type="text" ></div>
+		<div>성별 <input name="sex" type="text" ></div>
+		  <div>해시태그           
+          <div id="hash"></div>
+          <input id="hash_text" type="text">
+        </div>
+		<div>자기소개<input name="introduce" type="text"></div>
+
+  <div>포트폴리오<input name="pf[]" type="text"><input id="pf_add" type="button" value="추가"></div>
+  <div>경력사항<input name="comp[]" type="text"><input id="comp_add" type="button" value="추가"></div>
+
+
+		<input type="submit" value="수정완료">
+    </form>
+	</div>
+
+</div>
+
+<?php
+include 'footer.php';
+?>
+
+  </body>
+</html>

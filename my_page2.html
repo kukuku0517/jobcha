@@ -1,0 +1,27 @@
+<!--http://13.112.122.174/index_prac.html -->
+<?php
+
+include 'header2.php';
+
+?>
+
+  <body>
+    <div class="container">
+      <div id="main">
+        <?php
+        include 'my_page2.php';
+        ?>
+      </div>
+    </div>
+
+    <script>
+		$('#edit_profile').on('click',function(){
+			self.location='./edit_profile.html';
+		});
+    $('#delete_my_page2').on('click',function(){
+			self.location='./delete_my_page2.php';
+		});
+	</script>
+
+  </body>
+</html>

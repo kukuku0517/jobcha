@@ -1,0 +1,103 @@
+<?php
+
+include 'header.php';
+
+?>
+
+<script>
+  $(document).ready(function(){
+ 
+   
+    var hash_load=function(hash){
+       var hash_span= hash.children().last();
+
+       var set_main=function(main){
+           if(main==0){
+              hash_span.children('#hash_span').css('background','#3368FF');
+            }else{
+              hash_span.children('#hash_span').css('background','#E67418');
+            }
+       }     
+
+       var main = hash_span.children('#hash_id').val();
+       set_main(main);
+
+       hash_span.children('#hash_span').on('click',function(){
+         main=1-main;
+         hash_span.children('#hash_id').val(main);
+         set_main(main);
+       }); 
+
+       var hash_remove = hash_span.children('#hash_remove');    
+       hash_remove.on('click',function(){          
+        hash_remove.parent().remove();
+          });
+        };
+
+  $("#hash_text").keyup(function(){
+
+    var t = $(this).val();
+    
+    $.ajax({
+      type:"POST",
+      url:"hash.php",
+      data:{'text':t},
+      success:function(res){
+      
+      if(res!=""){
+          $('#hash').append(res);
+          $('#hash_text').val("");
+          hash_load( $('#hash'));
+        }
+      }
+    });
+
+  });
+
+
+  });
+</script>
+
+  <body>
+
+    <div class="container">
+    <div id="main">
+   
+    <form id ="adds" action="./add.php" method="GET">
+      <div>아이디<input name="login_id" type="text" placeholder="10자이내 " required></div>
+      <div>비밀번호<input name="login_pw" type="text" placeholder="10자이내 " required></div>
+      <div>이름<input name="name" type="text" placeholder="이름 " required></div>
+      <div>나이<input name="age" type="text" placeholder="나이 " required></div>
+      <div>성별<input name="sex" type="text" placeholder="성별" required></div>
+      
+    <!--  <div id="div_specialty">특기
+        <input name="specialty0" type="text" placeholder="특기 " required>
+        <input type="button" value="+" id="add_specialty">
+      </div>
+      <div id="div_interest">관심사
+        <input name="interest0" type="text" placeholder="관심사 " required>
+        <input type="button" value="+" id="add_interest">
+      </div>-->
+      <div>해시태그           
+        
+          <div id="hash"></div>
+          <input id="hash_text" type="text">
+
+        </div>
+      <div>소개
+        <input name="introduce" type="text" placeholder="소개 " required>
+      </div>
+      <input type="submit" value="확인" >
+
+    </form>
+    </div>
+      
+
+    </div>
+<?php
+include 'footer.php';
+?>
+  </body>
+</html>
+
+

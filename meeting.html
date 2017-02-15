@@ -1,0 +1,45 @@
+<?php
+
+include 'header.php';
+
+?>
+
+  <body>
+
+    <div class="container">
+    <div id="main">
+  		<?php
+include 'meeting.php';
+  		?>
+      <script type="text/javascript">
+   
+  function like_btn(id){
+    
+    $.ajax({
+      type:"POST",
+      url:"like_meeting.php",
+      data:{m_id:id},
+      success:function(response){
+        var json = jQuery.parseJSON(response);
+        if(json.suc){
+            $('#likes'+id).text(json.like);
+            if(json.cancel){
+              $('#like_btn_id'+id).val("좋아요").css('background','gray');
+            }else{
+              $('#like_btn_id'+id).val("좋아요 취소").css('background','red');          
+            }
+          }else{
+            alert("like fail");
+          }
+    }});
+   };
+      </script>
+    </div>
+    	
+
+    </div>
+<?php
+include 'footer.php';
+?>
+  </body>
+</html>
